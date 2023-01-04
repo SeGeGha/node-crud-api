@@ -1,6 +1,8 @@
+import { IncomingMessage, ServerResponse } from 'http';
+
 import { getUsers, getUser, createUser, updateUser, removeUser } from './controllers/userController';
 
-export const router = async (req, res) => {
+export const router = async (req: IncomingMessage, res: ServerResponse) => {
     if (req.url === '/api/users' && req.method === 'GET') {
         getUsers(res);
     } else if (req.url === '/api/users' && req.method === 'POST') {

@@ -1,0 +1,1 @@
+export const getUserId = (reqUrl: string) => reqUrl.split('/').at(-1);

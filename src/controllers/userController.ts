@@ -1,12 +1,14 @@
 import { validate } from 'uuid';
+import { IncomingMessage, ServerResponse } from 'http';
 
 import * as User from '../models/userModel';
 
 import { getReqBody } from '../utils/getReqBody';
+import { getUserId } from '../utils/getUserId';
 
 // @desc Gets All Users
 // @route GET /api/users
-export const getUsers = async (res) => {
+export const getUsers = async (res: ServerResponse) => {
     try {
         const users = await User.findAll();
 
@@ -14,14 +16,14 @@ export const getUsers = async (res) => {
         res.end(JSON.stringify(users));
     } catch (error) {
         res.writeHead(500, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ message: 'Something went wrong', error }));
+        res.end(JSON.stringify({ title: 'Something went wrong', message: error.message }));
     }
 };
 
 // @desc Gets Single User
 // @route GET /api/users/:id
-export const getUser = async (req, res) => {
-    const id = req.url.split('/').at(-1);
+export const getUser = async (req: IncomingMessage, res: ServerResponse) => {
+    const id = getUserId(req.url);
 
     if (!validate(id)) {
         res.writeHead(400, { 'Content-Type': 'application/json' });
@@ -42,13 +44,13 @@ export const getUser = async (req, res) => {
         }
     } catch (error) {
         res.writeHead(500, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ message: 'Something went wrong', error }));
+        res.end(JSON.stringify({ title: 'Something went wrong', message: error.message }));
     }
 };
 
 // @desc Create a User
 // @route POST /api/users
-export const createUser = async (req, res) => {
+export const createUser = async (req: IncomingMessage, res: ServerResponse) => {
     try {
         const body = await getReqBody(req);
         const { age, name, hobbies = [] } = JSON.parse(body);
@@ -59,14 +61,14 @@ export const createUser = async (req, res) => {
         res.end(JSON.stringify(newUser));
     } catch (error) {
         res.writeHead(500, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ message: 'Something went wrong', error }));
+        res.end(JSON.stringify({ title: 'Something went wrong', message: error.message }));
     }
 };
 
 // @desc Update a User
 // @route PUT /api/users/:id
-export const updateUser = async (req, res) => {
-    const id = req.url.split('/').at(-1);
+export const updateUser = async (req: IncomingMessage, res: ServerResponse) => {
+    const id = getUserId(req.url);
 
     if (!validate(id)) {
         res.writeHead(400, { 'Content-Type': 'application/json' });
@@ -96,14 +98,14 @@ export const updateUser = async (req, res) => {
         }
     } catch (error) {
         res.writeHead(500, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ message: 'Something went wrong', error }));
+        res.end(JSON.stringify({ title: 'Something went wrong', message: error.message }));
     }
 };
 
 // @desc Delete a User
 // @route DELETE /api/users/:id
-export const removeUser = async (req, res) => {
-    const id = req.url.split('/').at(-1);
+export const removeUser = async (req: IncomingMessage, res: ServerResponse) => {
+    const id = getUserId(req.url);
 
     if (!validate(id)) {
         res.writeHead(400, { 'Content-Type': 'application/json' });
@@ -126,6 +128,6 @@ export const removeUser = async (req, res) => {
         }
     } catch (error) {
         res.writeHead(500, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ message: 'Something went wrong', error }));
+        res.end(JSON.stringify({ title: 'Something went wrong', message: error.message }));
     }
 };
