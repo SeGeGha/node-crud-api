@@ -59,6 +59,13 @@ export const createUser = async (req: IncomingMessage, res: ServerResponse) => {
         const body = await getReqBody(req);
         const { age, name, hobbies = [] } = JSON.parse(body);
         const userData = { age, name, hobbies };
+        if (!validateUserData(userData)) {
+            res.writeHead(400, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({ message: M.INCORRECT_USER_DATA }));
+
+            return;
+        }
+
         const newUser = await User.create(userData);
 
         res.writeHead(201, { 'Content-Type': 'application/json' });
@@ -92,6 +99,13 @@ export const updateUser = async (req: IncomingMessage, res: ServerResponse) => {
                 name: name || user.name,
                 hobbies: hobbies || user.hobbies,
             };
+            if (!validateUserData(userData)) {
+                res.writeHead(400, { 'Content-Type': 'application/json' });
+                res.end(JSON.stringify({ message: M.INCORRECT_USER_DATA }));
+
+                return;
+            }
+
             const updatedUser = await User.update(id, userData);
 
             res.writeHead(200, { 'Content-Type': 'application/json' });
