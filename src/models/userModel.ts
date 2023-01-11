@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 
-import { IUser } from '../types/user';
+import { IUserData, IUser } from '../types/user';
 
 let users: IUser[] = [];
 
@@ -12,7 +12,7 @@ export const findById = async (id: string): Promise<IUser | undefined> => new Pr
     resolve(user);
 });
 
-export const create = async (userData: Omit<IUser, 'id'>): Promise<IUser> => new Promise(resolve => {
+export const create = async (userData: IUserData): Promise<IUser> => new Promise(resolve => {
     const user = { ...userData, id: uuidv4() };
 
     users.push(user);
@@ -20,7 +20,7 @@ export const create = async (userData: Omit<IUser, 'id'>): Promise<IUser> => new
     resolve(user);
 });
 
-export const update = async (id: string, userData: Omit<IUser, 'id'>): Promise<IUser | undefined> => new Promise(resolve => {
+export const update = async (id: string, userData: IUserData): Promise<IUser | undefined> => new Promise(resolve => {
     const index = users.findIndex(user => user.id === id);
 
     if (index >= 0) users[index] = { ...userData, id };
