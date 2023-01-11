@@ -1,10 +1,14 @@
-import { validate } from 'uuid';
+import { validate as validateId } from 'uuid';
 import { IncomingMessage, ServerResponse } from 'http';
 
 import * as User from '../models/userModel';
 
+import { validateUserData } from '../validators/validateUserData';
+
 import { getReqBody } from '../utils/getReqBody';
 import { getUserId } from '../utils/getUserId';
+
+import * as M from '../constants/messages';
 
 // @desc Gets All Users
 // @route GET /api/users
@@ -16,7 +20,7 @@ export const getUsers = async (res: ServerResponse) => {
         res.end(JSON.stringify(users));
     } catch (error) {
         res.writeHead(500, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ title: 'Something went wrong', message: error.message }));
+        res.end(JSON.stringify({ title: M.UNKNOWN_ERROR, message: error.message }));
     }
 };
 
@@ -25,9 +29,9 @@ export const getUsers = async (res: ServerResponse) => {
 export const getUser = async (req: IncomingMessage, res: ServerResponse) => {
     const id = getUserId(req.url);
 
-    if (!validate(id)) {
+    if (!validateId(id)) {
         res.writeHead(400, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ message: `User id ${id} is not valid` }));
+        res.end(JSON.stringify({ message: M.INVALID_USER_ID + ` Id: ${id}` }));
 
         return;
     }
@@ -40,11 +44,11 @@ export const getUser = async (req: IncomingMessage, res: ServerResponse) => {
             res.end(JSON.stringify(user));
         } else {
             res.writeHead(404, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ message: `User with id ${id} doesn\'t exist` }));
+            res.end(JSON.stringify({ message: M.NON_EXISTENT_USER_ID + ` Id: ${id}` }));
         }
     } catch (error) {
         res.writeHead(500, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ title: 'Something went wrong', message: error.message }));
+        res.end(JSON.stringify({ title: M.UNKNOWN_ERROR, message: error.message }));
     }
 };
 
@@ -61,7 +65,7 @@ export const createUser = async (req: IncomingMessage, res: ServerResponse) => {
         res.end(JSON.stringify(newUser));
     } catch (error) {
         res.writeHead(500, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ title: 'Something went wrong', message: error.message }));
+        res.end(JSON.stringify({ title: M.UNKNOWN_ERROR, message: error.message }));
     }
 };
 
@@ -70,9 +74,9 @@ export const createUser = async (req: IncomingMessage, res: ServerResponse) => {
 export const updateUser = async (req: IncomingMessage, res: ServerResponse) => {
     const id = getUserId(req.url);
 
-    if (!validate(id)) {
+    if (!validateId(id)) {
         res.writeHead(400, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ message: `User id ${id} is not valid` }));
+        res.end(JSON.stringify({ message: M.INVALID_USER_ID + ` Id: ${id}` }));
 
         return;
     }
@@ -94,11 +98,11 @@ export const updateUser = async (req: IncomingMessage, res: ServerResponse) => {
             res.end(JSON.stringify(updatedUser));
         } else {
             res.writeHead(404, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ message: `User with id ${id} doesn\'t exist` }));
+            res.end(JSON.stringify({ message: M.NON_EXISTENT_USER_ID + ` Id: ${id}` }));
         }
     } catch (error) {
         res.writeHead(500, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ title: 'Something went wrong', message: error.message }));
+        res.end(JSON.stringify({ title: M.UNKNOWN_ERROR, message: error.message }));
     }
 };
 
@@ -107,9 +111,9 @@ export const updateUser = async (req: IncomingMessage, res: ServerResponse) => {
 export const removeUser = async (req: IncomingMessage, res: ServerResponse) => {
     const id = getUserId(req.url);
 
-    if (!validate(id)) {
+    if (!validateId(id)) {
         res.writeHead(400, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ message: `User id ${id} is not valid` }));
+        res.end(JSON.stringify({ message: M.INVALID_USER_ID + ` Id: ${id}` }));
 
         return;
     }
@@ -124,10 +128,10 @@ export const removeUser = async (req: IncomingMessage, res: ServerResponse) => {
             res.end();
         } else {
             res.writeHead(404, { 'Content-Type': 'application/json' });
-            res.end(JSON.stringify({ message: `User with id ${id} doesn\'t exist` }));
+            res.end(JSON.stringify({ message: M.NON_EXISTENT_USER_ID + ` Id: ${id}` }));
         }
     } catch (error) {
         res.writeHead(500, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ title: 'Something went wrong', message: error.message }));
+        res.end(JSON.stringify({ title: M.UNKNOWN_ERROR, message: error.message }));
     }
 };

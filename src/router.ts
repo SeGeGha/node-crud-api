@@ -2,6 +2,8 @@ import { IncomingMessage, ServerResponse } from 'http';
 
 import { getUsers, getUser, createUser, updateUser, removeUser } from './controllers/userController';
 
+import { INVALID_ROUTE } from './constants/messages';
+
 export const router = async (req: IncomingMessage, res: ServerResponse) => {
     if (req.url === '/api/users' && req.method === 'GET') {
         getUsers(res);
@@ -15,6 +17,6 @@ export const router = async (req: IncomingMessage, res: ServerResponse) => {
         removeUser(req, res);
     } else {
         res.writeHead(404, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ message: 'Route not found' }));
+        res.end(JSON.stringify({ message: INVALID_ROUTE }));
     }
 }
