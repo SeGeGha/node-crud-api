@@ -87,3 +87,44 @@ describe('Invalid user id (not uuid) check', () => {
         });
     });
 });
+
+describe('Invalid user data in req.body check', () => {
+    it('returns 400 status code after POST \'/api/users\' request', async () => {
+        const mockInvalidUsersData = [
+            {
+                name: 'Philip',
+                hobbies: [],
+            },
+            {
+                age: 19,
+                hobbies: [],
+            },
+            {
+                age: 19,
+                name: 'Philip',
+                hobbies: 'sport',
+            },
+            {
+                age: '19',
+                name: 'Philip',
+                hobbies: [],
+            },
+            {
+                age: 19,
+                name: Symbol('Philip'),
+                hobbies: [],
+            },
+            {
+                age: 'Philip',
+                name: 19,
+                hobbies: [],
+            }
+        ];
+        const mockStatusCodeList = new Array(mockInvalidUsersData.length).fill(400);
+        const requester = request(server);
+        const results = await Promise.all(mockInvalidUsersData.map(userData => requester.post('/api/users').send(userData)));
+        const statusCodeList = results.map(result => result.statusCode)
+
+        expect(statusCodeList).toEqual(mockStatusCodeList);
+    });
+});
