@@ -73,3 +73,17 @@ describe('Basic success requests check', () => {
         expect(data).toEqual([]);
     });
 });
+
+describe('Invalid user id (not uuid) check', () => {
+    const methods = ['get', 'put', 'delete'];
+    const mockUserId = 'id94-c2';
+
+    methods.forEach(method => {
+        it(`returns 400 status code with error message after ${method.toUpperCase()} '/api/users/:id' request`, async () => {
+            const res = await request(server)[method](`/api/users/${mockUserId}`);
+
+            expect(res.statusCode).toBe(400);
+            expect(JSON.parse(res.text)).toHaveProperty('message', expect.any(String));
+        });
+    });
+});
