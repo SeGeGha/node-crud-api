@@ -74,6 +74,51 @@ describe('Basic success requests check', () => {
     });
 });
 
+describe('Failed user updating check', () => {
+    let user;
+
+    it('returns new user with 201 status code after POST \'/api/users\' request with valid user data', async () => {
+        const mockUserData = {
+            age: 22,
+            name: 'Sierge',
+            hobbies: ['animals', 'computer games']
+        };
+        const res = await request(server)
+            .post('/api/users')
+            .send(mockUserData);
+
+        expect(res.statusCode).toBe(201);
+
+        user = JSON.parse(res.text);
+
+        expect(validate(user.id)).toBeTruthy();
+        expect(user).toEqual({
+            id: user.id,
+            ...mockUserData,
+        })
+    });
+
+    it('returns 400 status code with error message after PUT \'/api/users/:id\' request with invalid user name', async () => {
+        const invalidName = ['Daniil'];
+        const res = await request(server).put(`/api/users/${user.id}`).send({
+            age: user.age,
+            name: invalidName,
+            hobbies: user.hobbies,
+        });
+
+        expect(res.statusCode).toBe(400);
+        expect(JSON.parse(res.text)).toHaveProperty('message', expect.any(String));
+    });
+
+    it('returns unchanged user after GET \'/api/users/:id\' request', async () => {
+        const res = await request(server).get(`/api/users/${user.id}`);
+        const data = JSON.parse(res.text);
+
+        expect(res.statusCode).toBe(200);
+        expect(data).toEqual(user);
+    });
+});
+
 describe('Invalid user id (not uuid) check', () => {
     const methods = ['get', 'put', 'delete'];
     const mockUserId = 'id94-c2';
