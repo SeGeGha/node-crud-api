@@ -119,6 +119,44 @@ describe('Failed user updating check', () => {
     });
 });
 
+describe('Failed double deletion of user check', () => {
+    let user;
+
+    it('returns new user with 201 status code after POST \'/api/users\' request with valid user data', async () => {
+        const mockUserData = {
+            age: 15,
+            name: 'Pavel',
+            hobbies: ['anime', 'books']
+        };
+        const res = await request(server)
+            .post('/api/users')
+            .send(mockUserData);
+
+        expect(res.statusCode).toBe(201);
+
+        user = JSON.parse(res.text);
+
+        expect(validate(user.id)).toBeTruthy();
+        expect(user).toEqual({
+            id: user.id,
+            ...mockUserData,
+        })
+    });
+
+    it('returns 204 status code after DELETE \'/api/users/:id\' request with valid user id', async () => {
+        const res = await request(server).delete(`/api/users/${user.id}`);
+
+        expect(res.statusCode).toBe(204);
+    });
+
+    it('returns 404 status code with error message after second DELETE \'/api/users/:id\' request', async () => {
+        const res = await request(server).delete(`/api/users/${user.id}`);
+
+        expect(res.statusCode).toBe(404);
+        expect(JSON.parse(res.text)).toHaveProperty('message', expect.any(String));
+    });
+});
+
 describe('Invalid user id (not uuid) check', () => {
     const methods = ['get', 'put', 'delete'];
     const mockUserId = 'id94-c2';
