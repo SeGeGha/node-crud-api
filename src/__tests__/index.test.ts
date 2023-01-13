@@ -1,5 +1,5 @@
 import request from 'supertest';
-import { validate } from 'uuid';
+import { validate, v4 } from 'uuid';
 
 import { server } from '../server';
 
@@ -128,6 +128,20 @@ describe('Invalid user id (not uuid) check', () => {
             const res = await request(server)[method](`/api/users/${mockUserId}`);
 
             expect(res.statusCode).toBe(400);
+            expect(JSON.parse(res.text)).toHaveProperty('message', expect.any(String));
+        });
+    });
+});
+
+describe('Invalid user id (uuid) check', () => {
+    const methods = ['get', 'put', 'delete'];
+    const mockUserId = v4();
+
+    methods.forEach(method => {
+        it(`returns 404 status code with error message after ${method.toUpperCase()} '/api/users/:id' request with invalid user id (uuid)`, async () => {
+            const res = await request(server)[method](`/api/users/${mockUserId}`);
+
+            expect(res.statusCode).toBe(404);
             expect(JSON.parse(res.text)).toHaveProperty('message', expect.any(String));
         });
     });
