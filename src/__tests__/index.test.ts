@@ -187,3 +187,17 @@ describe('Invalid user data in req.body check', () => {
         expect(statusCodeList).toEqual(mockStatusCodeList);
     });
 });
+
+describe('Invalid route check', () => {
+    const methods = ['get', 'post', 'put', 'delete'];
+
+    methods.forEach(method => {
+        it(`returns 404 status code with error message after ${method.toUpperCase()} request with invalid route`, async () => {
+            const invalidRoute = '/api/users/blogs/post';
+            const res = await request(server)[method](invalidRoute);
+
+            expect(res.statusCode).toBe(404);
+            expect(JSON.parse(res.text)).toHaveProperty('message', expect.any(String));
+        });
+    });
+});
