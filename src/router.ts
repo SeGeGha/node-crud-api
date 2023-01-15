@@ -4,19 +4,28 @@ import { getUsers, getUser, createUser, updateUser, removeUser } from './control
 
 import { INVALID_ROUTE } from './constants/messages';
 
+const routes = {
+    users: (url: string) => url === '/api/users',
+    user: (url: string) => url.startsWith('/api/users/') && !!url.replace('/api/users/', '').length && url.match(/\//g).length === 3,
+}
+
 export const router = async (req: IncomingMessage, res: ServerResponse) => {
-    if (req.url === '/api/users' && req.method === 'GET') {
-        getUsers(res);
-    } else if (req.url === '/api/users' && req.method === 'POST') {
-        createUser(req, res);
-    } else if (req.url.startsWith('/api/users/') && req.method === 'GET') {
-        getUser(req, res);
-    } else if (req.url.startsWith('/api/users/') && req.method === 'PUT') {
-        updateUser(req, res);
-    } else if (req.url.startsWith('/api/users/') && req.method === 'DELETE') {
-        removeUser(req, res);
-    } else {
-        res.writeHead(404, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ message: INVALID_ROUTE }));
+    if (routes.users(req.url) && req.method === 'GET') {
+        return getUsers(res);
     }
+    if (routes.users(req.url) && req.method === 'POST') {
+        return createUser(req, res);
+    }
+    if (routes.user(req.url) && req.method === 'GET') {
+        return getUser(req, res);
+    }
+    if (routes.user(req.url) && req.method === 'PUT') {
+        return updateUser(req, res);
+    }
+    if (routes.user(req.url) && req.method === 'DELETE') {
+        return removeUser(req, res);
+    }
+
+    res.writeHead(404, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ message: INVALID_ROUTE }));
 }
