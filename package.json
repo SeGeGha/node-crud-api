@@ -7,6 +7,7 @@
   "scripts": {
     "start:dev": "nodemon src/index.ts",
     "start:prod": "webpack --node-env=production && node dist/main.cjs",
+    "start:multi": "nodemon src/multi/index.ts",
     "test": "jest --config jest.config.ts"
   },
   "repository": {
