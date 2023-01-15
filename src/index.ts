@@ -1,4 +1,4 @@
-import * as dotenv from 'dotenv'
+import dotenv from 'dotenv';
 
 import { server } from './server';
 
@@ -8,4 +8,8 @@ const { PORT } = process.env;
 
 server.listen(PORT, () => {
     console.log(`Server running on port: ${PORT}`)
+});
+
+server.on('error', error => {
+    console.log('Server running error:', error.message)
 });
