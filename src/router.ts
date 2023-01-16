@@ -7,7 +7,7 @@ import { INVALID_ROUTE } from './constants/messages';
 const routes = {
     users: (url: string) => url === '/api/users',
     user: (url: string) => url.startsWith('/api/users/') && !!url.replace('/api/users/', '').length && url.match(/\//g).length === 3,
-}
+};
 
 export const router = async (req: IncomingMessage, res: ServerResponse) => {
     if (routes.users(req.url) && req.method === 'GET') {

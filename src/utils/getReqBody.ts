@@ -1,4 +1,6 @@
-export const getReqBody = (req): Promise<string> => new Promise((resolve, reject) => {
+import { IncomingMessage } from 'http';
+
+export const getReqBody = (req: IncomingMessage): Promise<string> => new Promise((resolve, reject) => {
     try {
         let body = '';
 

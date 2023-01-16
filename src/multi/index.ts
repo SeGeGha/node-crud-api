@@ -12,3 +12,5 @@ if (cluster.isPrimary) {
 } else {
     initWorker(server);
 }
+
+process.on('SIGINT', () => process.exit());
