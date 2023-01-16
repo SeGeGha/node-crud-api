@@ -56,7 +56,7 @@ export const getUser = async (req: IncomingMessage, res: ServerResponse) => {
 // @route POST /api/users
 export const createUser = async (req: IncomingMessage, res: ServerResponse) => {
     try {
-        const body = await getReqBody(req);
+        const body = 'body' in req ? req.body as string : await getReqBody(req);
         const { age, name, hobbies = [] } = JSON.parse(body);
         const userData = { age, name, hobbies };
         if (!validateUserData(userData)) {
@@ -92,7 +92,7 @@ export const updateUser = async (req: IncomingMessage, res: ServerResponse) => {
         const user = await User.findById(id);
 
         if (user) {
-            const body = await getReqBody(req);
+            const body = 'body' in req ? req.body as string : await getReqBody(req);
             const { age, name, hobbies } = JSON.parse(body);
             const userData = {
                 age: age || user.age,
