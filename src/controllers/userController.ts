@@ -57,8 +57,8 @@ export const getUser = async (req: IncomingMessage, res: ServerResponse) => {
 export const createUser = async (req: IncomingMessage, res: ServerResponse) => {
     try {
         const body = 'body' in req ? req.body as string : await getReqBody(req);
-        const { age, name, hobbies = [] } = JSON.parse(body);
-        const userData = { age, name, hobbies };
+        const { age, username, hobbies = [] } = JSON.parse(body);
+        const userData = { age, username, hobbies };
         if (!validateUserData(userData)) {
             res.writeHead(400, { 'Content-Type': 'application/json' });
             res.end(JSON.stringify({ message: M.INCORRECT_USER_DATA }));
@@ -93,10 +93,10 @@ export const updateUser = async (req: IncomingMessage, res: ServerResponse) => {
 
         if (user) {
             const body = 'body' in req ? req.body as string : await getReqBody(req);
-            const { age, name, hobbies } = JSON.parse(body);
+            const { age, username, hobbies } = JSON.parse(body);
             const userData = {
                 age: age || user.age,
-                name: name || user.name,
+                username: username || user.username,
                 hobbies: hobbies || user.hobbies,
             };
             if (!validateUserData(userData)) {

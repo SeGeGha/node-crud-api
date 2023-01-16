@@ -17,7 +17,7 @@ describe('Basic success requests check', () => {
     it('returns new user with 201 status code after POST \'/api/users\' request with valid user data', async () => {
         const mockUserData = {
             age: 34,
-            name: 'Ivan',
+            username: 'Ivan',
             hobbies: ['sport', 'animals', 'computer games']
         };
         const res = await request(server)
@@ -47,7 +47,7 @@ describe('Basic success requests check', () => {
         const age = 37;
         const res = await request(server).put(`/api/users/${user.id}`).send({
             age,
-            name: user.name,
+            username: user.username,
             hobbies: user.hobbies,
         });
         const data = JSON.parse(res.text);
@@ -80,7 +80,7 @@ describe('Failed user updating check', () => {
     it('returns new user with 201 status code after POST \'/api/users\' request with valid user data', async () => {
         const mockUserData = {
             age: 22,
-            name: 'Sierge',
+            username: 'Sierge',
             hobbies: ['animals', 'computer games']
         };
         const res = await request(server)
@@ -99,10 +99,10 @@ describe('Failed user updating check', () => {
     });
 
     it('returns 400 status code with error message after PUT \'/api/users/:id\' request with invalid user name', async () => {
-        const invalidName = ['Daniil'];
+        const invalidUserName = ['Daniil'];
         const res = await request(server).put(`/api/users/${user.id}`).send({
             age: user.age,
-            name: invalidName,
+            username: invalidUserName,
             hobbies: user.hobbies,
         });
 
@@ -125,7 +125,7 @@ describe('Failed double deletion of user check', () => {
     it('returns new user with 201 status code after POST \'/api/users\' request with valid user data', async () => {
         const mockUserData = {
             age: 15,
-            name: 'Pavel',
+            username: 'Pavel',
             hobbies: ['anime', 'books']
         };
         const res = await request(server)
@@ -189,7 +189,7 @@ describe('Invalid user data in req.body check', () => {
     it('returns 400 status code after POST \'/api/users\' request', async () => {
         const mockInvalidUsersData = [
             {
-                name: 'Philip',
+                username: 'Philip',
                 hobbies: [],
             },
             {
@@ -198,22 +198,22 @@ describe('Invalid user data in req.body check', () => {
             },
             {
                 age: 19,
-                name: 'Philip',
+                username: 'Philip',
                 hobbies: 'sport',
             },
             {
                 age: '19',
-                name: 'Philip',
+                username: 'Philip',
                 hobbies: [],
             },
             {
                 age: 19,
-                name: Symbol('Philip'),
+                username: Symbol('Philip'),
                 hobbies: [],
             },
             {
                 age: 'Philip',
-                name: 19,
+                username: 19,
                 hobbies: [],
             }
         ];

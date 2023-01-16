@@ -4,32 +4,28 @@ import { IUserData, IUser } from '../types/user';
 
 let users: IUser[] = [];
 
-export const findAll = async (): Promise<IUser[]> => new Promise(resolve => resolve(users));
+export const findAll = async (): Promise<IUser[]> => users;
 
-export const findById = async (id: string): Promise<IUser | undefined> => new Promise(resolve => {
-    const user = users.find(user => user.id === id);
+export const findById = async (id: string): Promise<IUser | undefined> => users.find(user => user.id === id);
 
-    resolve(user);
-});
-
-export const create = async (userData: IUserData): Promise<IUser> => new Promise(resolve => {
+export const create = async (userData: IUserData): Promise<IUser> => {
     const user = { ...userData, id: uuidv4() };
 
     users.push(user);
 
-    resolve(user);
-});
+    return user;
+};
 
-export const update = async (id: string, userData: IUserData): Promise<IUser | undefined> => new Promise(resolve => {
+export const update = async (id: string, userData: IUserData): Promise<IUser | undefined> => {
     const index = users.findIndex(user => user.id === id);
 
     if (index >= 0) users[index] = { ...userData, id };
 
-    resolve(users[index]);
-});
+    return users[index];
+};
 
-export const remove = async (id: string): Promise<IUser[]> => new Promise(resolve => {
+export const remove = async (id: string): Promise<IUser[]> => {
     users = users.filter(user => user.id !== id);
 
-    resolve(users);
-});
+    return users;
+};

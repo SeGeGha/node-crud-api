@@ -27,7 +27,7 @@ App supports 'GET', 'POST', 'PUT', 'DELETE' methods and `api/users` endpoint.
     - Server answers with `status code` **201** and newly created record
     - Server answers with `status code` **400** and corresponding message if request `body` does not contain **required** fields
 > Request body must have following properties:
->    - `name` — user's name (`string`)
+>    - `username` — user's name (`string`)
 >    - `age` — user's age (`number`)
 >    - `hobbies` — user's hobbies (`array` of `strings` or empty `array`, if you don't specify it, an empty array will be substituted)
 - **PUT** `api/users/{userId}` is used to update existing user
@@ -92,12 +92,12 @@ DB has message from worker 10144: method - GET, url - /api/users, body -
 Worker 10144 has message from DB: statusCode - 200, headers - {"Content-Type":"application/json"}, body - []
 DB has message from worker 7412: method - POST, url - /api/users, body - {
     "age": 22,
-    "name": "Pavel2",
+    "username": "Pavel2",
     "hobbies": []
 }
-Worker 7412 has message from DB: statusCode - 201, headers - {"Content-Type":"application/json"}, body - {"age":22,"name":"Pavel2","hobbies":[],"id":"0d6b9e8d-a224-4679-87d3-c34030a255b9"}
+Worker 7412 has message from DB: statusCode - 201, headers - {"Content-Type":"application/json"}, body - {"age":22,"username":"Pavel2","hobbies":[],"id":"0d6b9e8d-a224-4679-87d3-c34030a255b9"}
 DB has message from worker 7860: method - GET, url - /api/users, body -
-Worker 7860 has message from DB: statusCode - 200, headers - {"Content-Type":"application/json"}, body - [{"age":22,"name":"Pavel2","hobbies":[],"id":"0d6b9e8d-a224-4679-87d3-c34030a255b9"
+Worker 7860 has message from DB: statusCode - 200, headers - {"Content-Type":"application/json"}, body - [{"age":22,"username":"Pavel2","hobbies":[],"id":"0d6b9e8d-a224-4679-87d3-c34030a255b9"
 }]
 ```
 

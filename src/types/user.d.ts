@@ -1,5 +1,5 @@
 export interface IUserData {
-    name: string
+    username: string
     age: number
     hobbies: string[]
 }
