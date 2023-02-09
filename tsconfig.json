@@ -1,0 +1,16 @@
+{
+   "compilerOptions": {
+      "esModuleInterop": true,
+      "target": "es6",
+      "module": "esnext",
+      "moduleResolution": "node",
+      "outDir": "dist",
+      "sourceMap": true
+   },
+   "ts-node": {
+      "esm": true,
+      "experimentalSpecifierResolution": "node"
+   },
+   "include": ["src/**/*.ts"],
+   "exclude": ["node_modules", "**/*.spec.ts"]
+}
